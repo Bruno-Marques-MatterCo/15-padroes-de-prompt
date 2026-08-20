@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>15 Padrões de Prompt — Matter Academy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-0:#0b0c0f;
+    --bg-1:#15171c;
+    --bg-2:#1c1f26;
+    --line:#2a2d35;
+    --lime:#D4FF3D;
+    --white:#F4F4F0;
+    --gray:#9195a0;
+    --gray-dim:#5c6069;
+    --mono:'JetBrains Mono', monospace;
+    --sans:'Inter', sans-serif;
+    --display:'Space Grotesk', sans-serif;
+    --serif-i:'Instrument Serif', serif;
+  }
+
+  *{margin:0; padding:0; box-sizing:border-box;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:
+      radial-gradient(ellipse 900px 500px at 85% 0%, rgba(212,255,61,0.07), transparent 60%),
+      linear-gradient(180deg, var(--bg-0) 0%, var(--bg-1) 100%);
+    color:var(--white);
+    font-family:var(--sans);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;}
+  }
+
+  a{color:inherit;}
+
+  ::selection{background:var(--lime); color:#0b0c0f;}
+
+  .wrap{max-width:760px; margin:0 auto; padding:0 24px;}
+
+  /* ---------- TOP BAR ---------- */
+  .topbar{
+    position:sticky; top:0; z-index:50;
+    background:rgba(11,12,15,0.85);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .topbar-inner{
+    max-width:760px; margin:0 auto; padding:14px 24px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .brand{display:flex; align-items:center; gap:10px; font-family:var(--display); font-weight:700; font-size:13px; letter-spacing:0.02em;}
+  .brand-logo{height:22px; width:auto; display:block;}
+  .topbar-inner{justify-content:flex-start;}
+
+  /* ---------- HERO ---------- */
+  .hero{padding:72px 0 56px; border-bottom:1px solid var(--line);}
+  .eyebrow{
+    display:flex; align-items:center; gap:10px;
+    font-family:var(--mono); font-size:11px; letter-spacing:0.1em; text-transform:uppercase;
+    color:var(--lime); margin-bottom:28px;
+  }
+  .eyebrow .rule{width:22px; height:1px; background:var(--lime);}
+  .eyebrow .dim{color:var(--gray-dim);}
+
+  h1.title{
+    font-size:clamp(42px, 9vw, 68px);
+    line-height:0.98;
+    letter-spacing:-0.01em;
+  }
+  h1.title .i{font-family:var(--serif-i); font-style:italic; font-weight:400; color:var(--white); display:block;}
+  h1.title .b{font-family:var(--display); font-weight:700; color:var(--lime); display:block;}
+
+  .hero-desc{
+    margin-top:24px; max-width:480px;
+    color:var(--gray); font-size:16px; line-height:1.6;
+  }
+
+  .hero-meta{
+    margin-top:36px; display:flex; gap:24px; flex-wrap:wrap;
+    font-family:var(--mono); font-size:11px; color:var(--gray-dim); letter-spacing:0.03em;
+  }
+  .hero-meta strong{color:var(--gray); font-weight:500;}
+
+  /* ---------- TOC ---------- */
+  .toc{padding:40px 0; border-bottom:1px solid var(--line);}
+  .toc-label{font-family:var(--mono); font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:var(--gray-dim); margin-bottom:18px;}
+  .toc-grid{display:grid; grid-template-columns:repeat(2, 1fr); gap:10px;}
+  @media (max-width:520px){.toc-grid{grid-template-columns:1fr;}}
+  .toc-item{
+    display:flex; align-items:baseline; gap:10px;
+    padding:10px 12px; border-radius:6px;
+    text-decoration:none; font-size:13.5px; color:var(--gray);
+    transition:background 0.15s, color 0.15s;
+  }
+  .toc-item:hover{background:var(--bg-2); color:var(--white);}
+  .toc-num{font-family:var(--mono); font-size:11px; color:var(--lime); flex-shrink:0;}
+
+  /* ---------- CATEGORY SECTION ---------- */
+  .category{padding:64px 0 8px; scroll-margin-top:70px;}
+  .cat-head{display:flex; align-items:baseline; gap:16px; margin-bottom:8px;}
+  .cat-tag{
+    font-family:var(--mono); font-size:11px; letter-spacing:0.08em; text-transform:uppercase;
+    background:var(--lime); color:#0b0c0f; padding:4px 10px; border-radius:100px; font-weight:500;
+  }
+  .cat-range{font-family:var(--mono); font-size:11px; color:var(--gray-dim);}
+  h2.cat-title{font-family:var(--display); font-weight:700; font-size:28px; margin-top:14px;}
+  .cat-title .i{font-family:var(--serif-i); font-style:italic; font-weight:400; color:var(--gray);}
+
+  /* ---------- PATTERN CARD ---------- */
+  .pattern{
+    padding:44px 0; border-top:1px solid var(--line);
+    scroll-margin-top:70px;
+  }
+  .pattern-head{display:flex; align-items:flex-start; gap:16px; margin-bottom:16px;}
+  .pattern-num{
+    font-family:var(--mono); font-size:12px; color:var(--bg-0); background:var(--gray);
+    width:34px; height:34px; border-radius:8px; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center; font-weight:500;
+  }
+  .pattern-titlewrap{padding-top:3px;}
+  .pattern-title{font-family:var(--display); font-weight:700; font-size:21px;}
+  .pattern-title .accent{color:var(--lime);}
+  .pattern-sub{font-family:var(--mono); font-size:10.5px; color:var(--gray-dim); letter-spacing:0.05em; text-transform:uppercase; margin-top:3px;}
+
+  .pattern-desc{color:var(--gray); font-size:15px; line-height:1.65; margin-bottom:20px; max-width:600px;}
+  .pattern-desc strong{color:var(--white); font-weight:600;}
+
+  .trigger-line{
+    font-family:var(--mono); font-size:12.5px; color:var(--lime);
+    background:rgba(212,255,61,0.06); border:1px solid rgba(212,255,61,0.2);
+    padding:10px 14px; border-radius:8px; margin-bottom:20px; display:inline-block;
+  }
+
+  /* prompt code block */
+  .prompt-box{
+    background:var(--bg-2); border:1px solid var(--line); border-radius:10px;
+    overflow:hidden; margin-bottom:16px;
+  }
+  .prompt-box-head{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:10px 16px; border-bottom:1px solid var(--line);
+    background:rgba(255,255,255,0.02);
+  }
+  .prompt-box-label{font-family:var(--mono); font-size:10.5px; letter-spacing:0.08em; text-transform:uppercase; color:var(--gray-dim);}
+  .copy-btn{
+    display:flex; align-items:center; gap:6px;
+    background:transparent; border:1px solid var(--line); color:var(--gray);
+    font-family:var(--mono); font-size:11px; padding:5px 10px; border-radius:6px;
+    cursor:pointer; transition:all 0.15s;
+  }
+  .copy-btn:hover{border-color:var(--lime); color:var(--lime);}
+  .copy-btn.copied{border-color:var(--lime); color:var(--lime); background:rgba(212,255,61,0.08);}
+  .copy-btn svg{width:12px; height:12px;}
+
+  .prompt-box-body{
+    padding:16px; font-family:var(--mono); font-size:12.5px; line-height:1.7;
+    color:#d8d9dd; white-space:pre-wrap; word-wrap:break-word;
+  }
+  .prompt-box-body .lit{color:var(--lime);}
+  .prompt-box-body .dim{color:var(--gray-dim);}
+
+  .note{
+    display:flex; gap:10px; margin-top:16px;
+    font-size:13.5px; color:var(--gray); line-height:1.6;
+  }
+  .note .mark{color:var(--lime); flex-shrink:0; font-family:var(--mono);}
+
+  .usage-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:16px;}
+  @media (max-width:520px){.usage-grid{grid-template-columns:1fr;}}
+  .usage-box{padding:14px 16px; border-radius:8px; font-size:13px; line-height:1.55;}
+  .usage-box.use{background:rgba(212,255,61,0.05); border:1px solid rgba(212,255,61,0.15);}
+  .usage-box.avoid{background:rgba(255,255,255,0.02); border:1px solid var(--line);}
+  .usage-box .lbl{font-family:var(--mono); font-size:10px; letter-spacing:0.06em; text-transform:uppercase; margin-bottom:6px; display:block;}
+  .usage-box.use .lbl{color:var(--lime);}
+  .usage-box.avoid .lbl{color:var(--gray-dim);}
+  .usage-box p{color:var(--gray);}
+
+  .mma-row{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:18px;}
+  @media (max-width:520px){.mma-row{grid-template-columns:1fr;}}
+  .mma-box{background:var(--bg-2); border:1px solid var(--line); border-radius:8px; padding:14px;}
+  .mma-letter{font-family:var(--display); font-size:20px; font-weight:700; color:var(--lime);}
+  .mma-name{font-size:12.5px; font-weight:600; margin-top:2px;}
+  .mma-desc{font-size:11.5px; color:var(--gray-dim); margin-top:2px;}
+
+  .chain-step{
+    display:flex; gap:14px; align-items:flex-start; margin-bottom:2px;
+  }
+  .chain-num{
+    font-family:var(--mono); font-size:11px; color:var(--lime); flex-shrink:0;
+    width:24px; padding-top:14px;
+  }
+  .chain-arrow{text-align:center; color:var(--gray-dim); font-size:13px; margin:2px 0 2px 24px;}
+
+  /* ---------- CLOSING ---------- */
+  .closing{padding:80px 0 40px; border-top:1px solid var(--line); margin-top:40px;}
+  .closing-eyebrow{
+    font-family:var(--mono); font-size:11px; letter-spacing:0.1em; text-transform:uppercase;
+    color:var(--gray-dim); margin-bottom:24px; display:flex; align-items:center; gap:10px;
+  }
+  .closing-eyebrow .rule{width:22px; height:1px; background:var(--gray-dim);}
+  h2.manifesto{font-size:clamp(32px,7vw,48px); line-height:1.08; margin-bottom:24px;}
+  h2.manifesto .i{font-family:var(--serif-i); font-style:italic; font-weight:400;}
+  h2.manifesto .b{font-family:var(--display); font-weight:700; color:var(--lime);}
+  .manifesto-body{color:var(--gray); font-size:15.5px; line-height:1.7; max-width:560px; margin-bottom:40px;}
+  .manifesto-body strong{color:var(--white); font-weight:600;}
+  .manifesto-body .hl{color:var(--lime); font-weight:600;}
+
+  .summary-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:10px;}
+  @media (max-width:640px){.summary-grid{grid-template-columns:repeat(2,1fr);}}
+
+  /* ---------- CTA WHATSAPP ---------- */
+  .cta{
+    margin-top:48px; padding:40px 32px; border-radius:16px;
+    background:linear-gradient(135deg, rgba(212,255,61,0.1), rgba(212,255,61,0.02));
+    border:1px solid rgba(212,255,61,0.25);
+    text-align:center;
+  }
+  .cta-title{
+    font-family:var(--display); font-weight:700; font-size:clamp(20px,4vw,26px);
+    line-height:1.3; margin-bottom:22px; max-width:440px; margin-left:auto; margin-right:auto;
+  }
+  .cta-btn{
+    display:inline-flex; align-items:center; gap:10px;
+    background:var(--lime); color:#0b0c0f; text-decoration:none;
+    font-family:var(--sans); font-weight:600; font-size:15px;
+    padding:14px 26px; border-radius:100px;
+    transition:transform 0.15s, box-shadow 0.15s;
+  }
+  .cta-btn:hover{transform:translateY(-2px); box-shadow:0 8px 24px rgba(212,255,61,0.25);}
+  .cta-btn svg{width:18px; height:18px;}
+  .summary-card{
+    background:var(--bg-2); border:1px solid var(--line); border-radius:10px; padding:16px;
+  }
+  .summary-card .tag{font-family:var(--mono); font-size:10px; letter-spacing:0.06em; text-transform:uppercase; color:var(--lime);}
+  .summary-card .name{font-weight:600; font-size:14px; margin-top:8px; line-height:1.3;}
+  .summary-card .range{font-family:var(--mono); font-size:11px; color:var(--gray-dim); margin-top:8px;}
+
+  footer{
+    padding:36px 0 60px; border-top:1px solid var(--line); margin-top:56px;
+    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;
+  }
+  footer .fbrand{font-family:var(--display); font-weight:700; font-size:13px;}
+  footer .fmeta{font-family:var(--mono); font-size:11px; color:var(--gray-dim);}
+
+  /* fade-in on scroll */
+  .reveal{opacity:0; transform:translateY(14px); transition:opacity 0.6s ease, transform 0.6s ease;}
+  .reveal.in{opacity:1; transform:translateY(0);}
+</style>
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <img src="data:image/png;base64,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" alt="Matter Academy" class="brand-logo">
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+
+    <section class="hero">
+      <div class="eyebrow"><span class="rule"></span> 15 padrões <span class="dim">·</span> referência completa</div>
+      <h1 class="title">
+        <span class="i">Prompts</span>
+        <span class="b">avançados.</span>
+      </h1>
+      <p class="hero-desc">Um arsenal de 15 técnicas prontas para usar, com exemplo e contexto de aplicação. Cada padrão resolve um problema específico ao conversar com uma IA.</p>
+      <div class="hero-meta">
+        <span><strong>15</strong> padrões</span>
+        <span><strong>4</strong> categorias</span>
+        <span>Prontos para copiar e usar</span>
+      </div>
+    </section>
+
+    <nav class="toc">
+      <div class="toc-label">Índice</div>
+      <div class="toc-grid">
+        <a class="toc-item" href="#p01"><span class="toc-num">01</span> Zero-shot Prompting</a>
+        <a class="toc-item" href="#p02"><span class="toc-num">02</span> Few-shot Prompting</a>
+        <a class="toc-item" href="#p03"><span class="toc-num">03</span> Role Prompting</a>
+        <a class="toc-item" href="#p04"><span class="toc-num">04</span> Context Injection</a>
+        <a class="toc-item" href="#p05"><span class="toc-num">05</span> Fonte Delimitada</a>
+        <a class="toc-item" href="#p06"><span class="toc-num">06</span> Negative Prompting</a>
+        <a class="toc-item" href="#p07"><span class="toc-num">07</span> Chain-of-Thought</a>
+        <a class="toc-item" href="#p08"><span class="toc-num">08</span> Self-Consistency</a>
+        <a class="toc-item" href="#p09"><span class="toc-num">09</span> Tree-of-Thought</a>
+        <a class="toc-item" href="#p10"><span class="toc-num">10</span> Padrão de Qualidade</a>
+        <a class="toc-item" href="#p11"><span class="toc-num">11</span> Crítico-Revisor</a>
+        <a class="toc-item" href="#p12"><span class="toc-num">12</span> Refinamento Iterativo</a>
+        <a class="toc-item" href="#p13"><span class="toc-num">13</span> Prompt Chaining</a>
+        <a class="toc-item" href="#p14"><span class="toc-num">14</span> ReAct · Reason+Act</a>
+        <a class="toc-item" href="#p15"><span class="toc-num">15</span> Meta-Prompting</a>
+      </div>
+    </nav>
+
+    <!-- ===================== CATEGORIA: ENTRADA ===================== -->
+    <section class="category reveal" id="cat-entrada">
+      <div class="cat-head">
+        <span class="cat-tag">Entrada</span>
+        <span class="cat-range">Padrões 01 — 06</span>
+      </div>
+      <h2 class="cat-title"><span class="i">Estruturar</span> o pedido.</h2>
+    </section>
+
+    <article class="pattern reveal" id="p01">
+      <div class="pattern-head">
+        <div class="pattern-num">01</div>
+        <div class="pattern-titlewrap">
+          <div class="pattern-title">Zero-shot <span class="accent">Prompting</span></div>
+          <div class="pattern-sub">Padrão 01 / 15</div>
+        </div>
+      </div>
+      <p class="pattern-desc">A IA recebe a instrução sem nenhum exemplo. Funciona quando o formato é óbvio e o estilo médio da IA já entrega o suficiente.</p>
+      <div class="prompt-box">
+        <div class="prompt-box-head">
+          <span class="prompt-box-label">Prompt</span>
+          <button class="copy-btn" data-copy="Liste 5 ideias de post para LinkedIn sobre liderança em tempos de IA. Tom profissional, até 3 linhas cada.">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            Copiar
+          </button>
+        </div>
+        <div class="prompt-box-body">"Liste 5 ideias de post para LinkedIn sobre liderança em tempos de IA. Tom profissional, até 3 linhas cada."</div>
+      </div>
+      <div class="usage-grid">
+        <div class="usage-box use"><span class="lbl">Quando usar</span><p>Tarefas comuns e diretas, em que o estilo médio da IA já entrega o suficiente: respostas factuais, formatos padrão de mercado, pedidos pontuais.</p></div>
+        <div class="usage-box avoid"><span class="lbl">Quando evitar</span><p>Tarefas que precisam respeitar o tom, vocabulário ou regras próprias da sua área. O resultado genérico não serve nesses casos.</p></div>
+      </div>
+    </article>
+
+    <article class="pattern reveal" id="p02">
+      <div class="pattern-head">
+        <div class="pattern-num">02</div>
+        <div class="pattern-titlewrap">
+          <div class="pattern-title">Few-shot <span class="accent">Prompting</span></div>
+          <div class="pattern-sub">Padrão 02 / 15</div>
+        </div>
+      </div>
+      <p class="pattern-desc">Em vez de descrever o que você quer, você mostra. Com 2 ou 3 amostras rotuladas, a IA identifica a regra por trás e replica nas novas entradas.</p>
+      <div class="prompt-box">
+        <div class="prompt-box-head">
+          <span class="prompt-box-label">Prompt</span>
+          <button class="copy-btn" data-copy="Classifique e-mails de clientes seguindo este padrão:&#10;&#10;&quot;Cancelei e quero meu dinheiro de volta&quot; → reclamação · financeiro&#10;&quot;Como exportar minha fatura em PDF?&quot; → dúvida · self-service&#10;&quot;Vocês têm uma versão Pro para equipes?&quot; → pré-venda · comercial&#10;&#10;Classifique este:&#10;&quot;Meu painel não está sincronizando há 3 dias e tenho demonstração para o cliente amanhã.&quot;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            Copiar
+          </button>
+        </div>
+        <div class="prompt-box-body">Classifique e-mails de clientes seguindo este padrão:
+
+"Cancelei e quero meu dinheiro de volta"
+→ reclamação · financeiro
+
+"Como exportar minha fatura em PDF?"
+→ dúvida · self-service
+
+"Vocês têm uma versão Pro para equipes?"
+→ pré-venda · comercial
+
+Classifique este:
+"Meu painel não está sincronizando há 3 dias e tenho demonstração para o cliente amanhã."</div>
+      </div>
+      <div class="note"><span class="mark">→</span> Sem exemplos, a IA escolhe o critério dela: pode acertar, pode chutar. Com 2 a 3 exemplos, ela detecta a regra implícita e reproduz o seu sistema, não inventa outro.</div>
+    </article>
+
+    <article class="pattern reveal" id="p03">
+      <div class="pattern-head">
+        <div class="pattern-num">03</div>
+        <div class="pattern-titlewrap">
+          <div class="pattern-title">Role <span class="accent">Prompting</span></div>
+          <div class="pattern-sub">Padrão 03 / 15</div>
+        </div>
+      </div>
+      <p class="pattern-desc">Diga quem a IA é antes de pedir. O tom, o vocabulário e o foco mudam radicalmente. <strong>O role define a voz; a voz define a entrega.</strong></p>
+      <div class="prompt-box">
+        <div class="prompt-box-head">
+          <span class="prompt-box-label">Prompt · com role</span>
+          <button class="copy-btn" data-copy="Você é uma advogada sênior de proteção de dados, acostumada a falar com diretores não-jurídicos. Em até 6 linhas, explique a LGPD focando no risco real para o negócio (multas, reputação) e dê 1 exemplo prático de aplicação.">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            Copiar
+          </button>
+        </div>
+        <div class="prompt-box-body">"Você é uma advogada sênior de proteção de dados, acostumada a falar com diretores não-jurídicos.
+
+Em até 6 linhas, explique a LGPD focando no risco real para o negócio (multas, reputação) e dê 1 exemplo prático de aplicação."</div>
+      </div>
+      <div class="note"><span class="mark">→</span> Sem role, a mesma pergunta produz uma resposta no estilo médio da IA. Com role, vocabulário, exemplos e ângulo se ajustam ao perfil descrito.</div>
+    </article>
+
+    <article class="pattern reveal" id="p04">
+      <div class="pattern-head">
+        <div class="pattern-num">04</div>
+        <div class="pattern-titlewrap">
+          <div class="pattern-title">Context <span class="accent">Injection</span></div>
+          <div class="pattern-sub">Padrão 04 / 15</div>
+        </div>
+      </div>
+      <p class="pattern-desc">Cole o material literal no prompt. A IA não inventa o que está bem na frente dela. As três aspas <strong>"""</strong> isolam o conteúdo da instrução.</p>
+      <div class="prompt-box">
+        <div class="prompt-box-head">
+          <span class="prompt-box-label">Prompt</span>
+          <button class="copy-btn" data-copy="Você é gerente de relacionamento sênior da Matter&Co. Tom: empático, direto, sem desculpas vazias.&#10;&#10;Mensagem do cliente (texto literal):&#10;&quot;&quot;&quot;&#10;Pago R$ 980 por mês há 4 meses e ninguém me ligou. Comprei o plano com promessa de acompanhamento. Estou abandonado. Isso é uma piada.&#10;&quot;&quot;&quot;&#10;&#10;Tarefa: Responda em até 8 linhas reconhecendo o problema concreto, sem desculpas genéricas. Ofereça uma call de 20 min amanhã às 14h com o gerente de conta dele.">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            Copiar
+          </button>
+        </div>
+        <div class="prompt-box-body">Você é gerente de relacionamento sênior da Matter&Co.
+Tom: empático, direto, sem desculpas vazias.
+
+Mensagem do cliente (texto literal):
+<span class="lit">"""</span>
+Pago R$ 980 por mês há 4 meses e ninguém me ligou.
+Comprei o plano com promessa de acompanhamento.
+Estou abandonado. Isso é uma piada.
+<span class="lit">"""</span>
+
+Tarefa: Responda em até 8 linhas reconhecendo o problema
+concreto, sem desculpas genéricas. Ofereça uma call de 20
+min amanhã às 14h com o gerente de conta dele.</div>
+      </div>
+      <div class="note"><span class="mark">→</span> Sem as aspas triplas, a IA pode interpretar palavras do texto colado como instruções (ex: "estou abandonado" vira pedido, não dado). É o operador mais valioso do toolkit.</div>
+    </article>
+
+    <article class="pattern reveal" id="p05">
+      <div class="pattern-head">
+        <div class="pattern-num">05</div>
+        <div class="pattern-titlewrap">
+          <div class="pattern-title">Fonte <span class="accent">Delimitada</span></div>
+          <div class="pattern-sub">Padrão 05 / 15</div>
+        </div>
+      </div>
+      <p class="pattern-desc">Você instrui a IA a só usar o material fornecido. Reduz drasticamente a invenção (alucinação) e cria rastreabilidade.</p>
+      <div class="prompt-box">
+        <div class="prompt-box-head">
+          <span class="prompt-box-label">Três regras</span>
+          <button class="copy-btn" data-copy="01. Responda apenas com base no conteúdo do anexo.&#10;02. Se a informação não estiver lá, escreva literalmente: &quot;Não consta no documento.&quot;&#10;03. Para cada afirmação relevante, cite a seção ou parágrafo de origem.">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            Copiar
+          </button>
+        </div>
+        <div class="prompt-box-body">01. Responda apenas com base no conteúdo do anexo.
+02. Se a informação não estiver lá, escreva literalmente:
+    "Não consta no documento."
+03. Para cada afirmação relevante, cite a seção ou
+    parágrafo de origem.</div>
+      </div>
+      <div class="note"><span class="mark">→</span> Este padrão é a porta de entrada para RAG (Retrieval-Augmented Generation), um conceito mais avançado de IA. Aqui é a versão manual; lá é a versão automatizada.</div>
+    </article>
+
+    <article class="pattern reveal" id="p06">
+      <div class="pattern-head">
+        <div class="pattern-num">06</div>
+        <div class="pattern-titlewrap">
+          <div class="pattern-title">Negative <span class="accent">Prompting</span></div>
+          <div class="pattern-sub">Padrão 06 / 15</div>
+        </div>
+      </div>
+      <p class="pattern-desc">Dizer o que <strong>NÃO</strong> fazer é tão poderoso quanto dizer o que fazer. A IA preenche lacunas com padrões mais frequentes; negar esses padrões corta saídas indesejadas antes de existirem.</p>
+      <div class="prompt-box">
+        <div class="prompt-box-head">
+          <span class="prompt-box-label">Regras negativas</span>
+          <button class="copy-btn" data-copy="Não use jargão de consultoria.&#10;Não invente números que não estão no texto.&#10;Não termine com perguntas retóricas.&#10;Não use palavras como &quot;sinergia&quot;, &quot;disruptivo&quot;, &quot;ecossistema&quot;, &quot;alavancar&quot;.&#10;Não exceda 200 palavras.">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            Copiar
+          </button>
+        </div>
+        <div class="prompt-box-body">✗ Não use jargão de consultoria.
+✗ Não invente números que não estão no texto.
+✗ Não termine com perguntas retóricas.
+✗ Não use palavras como "sinergia", "disruptivo",
+  "ecossistema", "alavancar".
+✗ Não exceda 200 palavras.</div>
+      </div>
+      <div class="note"><span class="mark">→</span> Não basta proibir. Defina também o comportamento de fallback: o que a IA deve fazer caso o padrão indesejado apareça (ex: marcar o trecho com "⚠ revisar" e oferecer duas alternativas neutras).</div>
+    </article>
+
+    <!-- ===================== CATEGORIA: RACIOCÍNIO ===================== -->
+    <section class="category reveal" id="cat-raciocinio">
+      <div class="cat-head">
+        <span class="cat-tag">Raciocínio</span>
+        <span class="cat-range">Padrões 07 — 09</span>
+      </div>
+      <h2 class="cat-title"><span class="i">Guiar</span> o pensar.</h2>
+    </section>
+
+    <article class="pattern reveal" id="p07">
+      <div class="pattern-head">
+        <div class="pattern-num">07</div>
+        <div class="pattern-titlewrap">
+          <div class="pattern-title">Chain-of-<span class="accent">Thought</span></div>
+          <div class="pattern-sub">Padrão 07 / 15</div>
+        </div>
+      </div>
+      <p class="pattern-desc">O prompt solicita passos intermediários de raciocínio antes da resposta final. Wei et al. (2022) mostraram que isto melhora tarefas de cálculo, senso comum e raciocínio simbólico, sobretudo combinado com few-shot.</p>
+      <div class="trigger-line">Frase-gatilho: "Pense passo a passo antes de responder."</div>
+      <div class="prompt-box">
+        <div class="prompt-box-head">
+          <span class="prompt-box-label">Prompt aplicado</span>
+          <button class="copy-btn" data-copy="Você é um consultor de negócios. Um cliente do setor de varejo está avaliando três áreas para aplicar Inteligência Artificial: (1) atendimento ao cliente, (2) previsão de demanda, (3) marketing personalizado.&#10;&#10;Analise cada opção passo a passo considerando: impacto esperado no negócio, facilidade de implementação, riscos e dependências.&#10;&#10;Mostre o raciocínio detalhado antes de apresentar sua recomendação final em até 5 linhas.">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            Copiar
+          </button>
+        </div>
+        <div class="prompt-box-body">Você é um consultor de negócios. Um cliente do setor de
+varejo está avaliando três áreas para aplicar Inteligência
+Artificial: (1) atendimento ao cliente, (2) previsão de
+demanda, (3) marketing personalizado.
+
+Analise cada opção passo a passo considerando:
+• impacto esperado no negócio,
+• facilidade de implementação,
+• riscos e dependências.
+
+Mostre o raciocínio detalhado antes de apresentar sua
+recomendação final em até 5 linhas.</div>
+      </div>
+    </article>
+
+    <article class="pattern reveal" id="p08">
+      <div class="pattern-head">
+        <div class="pattern-num">08</div>
+        <div class="pattern-titlewrap">
+          <div class="pattern-title">Self-<span class="accent">Consistency</span></div>
+          <div class="pattern-sub">Padrão 08 / 15 · problema com resposta única</div>
+        </div>
+      </div>
+      <p class="pattern-desc">Para problemas que têm uma resposta certa (cálculo, estimativa, diagnóstico), a IA percorre métodos diferentes e entrega o valor em que mais métodos convergem. É votação por consenso.</p>
+      <div class="prompt-box">
+        <div class="prompt-box-head">
+          <span class="prompt-box-label">Prompt aplicado</span>
+          <button class="copy-btn" data-copy="Você é gerente de projetos sênior. Preciso estimar o prazo de entrega de um novo módulo de checkout para nosso e-commerce.&#10;&#10;Dados:&#10;• Equipe: 3 devs · 1 designer · 1 QA&#10;• Escopo: integrar 2 gateways + carrinho novo&#10;• Dependência: aprovação jurídica (LGPD)&#10;&#10;Resolva 3 vezes, por caminhos diferentes:&#10;Caminho A · analogia (projetos parecidos)&#10;Caminho B · bottom-up (somar tarefas)&#10;Caminho C · top-down (margem sobre prazo alvo)&#10;&#10;Compare as 3 estimativas e entregue como resposta final a mais consistente, justificando em 3 linhas.">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            Copiar
+          </button>
+        </div>
+        <div class="prompt-box-body">Você é gerente de projetos sênior. Preciso estimar o prazo
+de entrega de um novo módulo de checkout para nosso
+e-commerce.
+
+Dados:
+• Equipe: 3 devs · 1 designer · 1 QA
+• Escopo: integrar 2 gateways + carrinho novo
+• Dependência: aprovação jurídica (LGPD)
+
+Resolva 3 vezes, por caminhos diferentes:
+Caminho A · analogia (projetos parecidos)
+Caminho B · bottom-up (somar tarefas)
+Caminho C · top-down (margem sobre prazo alvo)
+
+Compare as 3 estimativas e entregue como resposta final
+a mais consistente, justificando em 3 linhas.</div>
+      </div>
+    </article>
+
+    <article class="pattern reveal" id="p09">
+      <div class="pattern-head">
+        <div class="pattern-num">09</div>
+        <div class="pattern-titlewrap">
+          <div class="pattern-title">Tree-of-<span class="accent">Thought</span></div>
+          <div class="pattern-sub">Padrão 09 / 15 · decisão estratégica</div>
+        </div>
+      </div>
+      <p class="pattern-desc">A IA explora múltiplos caminhos em paralelo, avalia cada um por critérios e segue pelo mais promissor. Ao contrário do Self-Consistency, aqui as opções são qualitativamente diferentes, sem resposta numérica única.</p>
+      <div class="prompt-box">
+        <div class="prompt-box-head">
+          <span class="prompt-box-label">Prompt</span>
+          <button class="copy-btn" data-copy="Você é consultor de expansão para varejo alimentar. Cenário: rede regional de 12 lojas quer entrar em São Paulo capital nos próximos 12 meses.&#10;&#10;Gere 3 estratégias distintas de entrada. Para cada uma, liste: Prós, Contras, Premissa crítica (o que precisa ser verdade).&#10;&#10;Compare as três e recomende a mais sólida em até 4 linhas, justificando a escolha.">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            Copiar
+          </button>
+        </div>
+        <div class="prompt-box-body">Você é consultor de expansão para varejo alimentar.
+Cenário: rede regional de 12 lojas quer entrar em São
+Paulo capital nos próximos 12 meses.
+
+Gere 3 estratégias distintas de entrada.
+Para cada uma, liste:
+• Prós
+• Contras
+• Premissa crítica (o que precisa ser verdade)
+
+Compare as três e recomende a mais sólida em até 4
+linhas, justificando a escolha.</div>
+      </div>
+      <div class="note"><span class="mark">→</span> Usar em problemas estratégicos: entrar em mercado novo, redesenhar um processo, escolher uma arquitetura. Coisas com várias saídas plausíveis em que vale explorar antes de decidir.</div>
+    </article>
+
+    <!-- ===================== CATEGORIA: QUALIDADE ===================== -->
+    <section class="category reveal" id="cat-qualidade">
+      <div class="cat-head">
+        <span class="cat-tag">Qualidade</span>
+        <span class="cat-range">Padrões 10 — 12</span>
+      </div>
+      <h2 class="cat-title"><span class="i">Controlar</span> o output.</h2>
+    </section>
+
+    <article class="pattern reveal" id="p10">
+      <div class="pattern-head">
+        <div class="pattern-num">10</div>
+        <div class="pattern-titlewrap">
+          <div class="pattern-title">Padrão de <span class="accent">Qualidade</span></div>
+          <div class="pattern-sub">Padrão 10 / 15</div>
+        </div>
+      </div>
+      <p class="pattern-desc">A IA se autoavalia antes de entregar. Revisão deixa de ser olhômetro e vira processo: critérios objetivos, notas e reescrita seletiva.</p>
+      <div class="prompt-box">
+        <div class="prompt-box-head">
+          <span class="prompt-box-label">Prompt aplicado</span>
+          <button class="copy-btn" data-copy="Redija uma descrição de vaga para Analista de Dados Júnior em uma empresa de tecnologia. O texto deve ser atrativo para jovens profissionais, claro nos requisitos e alinhado a uma cultura de inovação.&#10;&#10;Antes de entregar a versão final, avalie a qualidade do texto com base nos critérios abaixo, atribuindo uma nota de 0 a 10 para cada um:&#10;1. Clareza na descrição da função&#10;2. Atratividade para o público jovem&#10;3. Adequação ao perfil de empresa inovadora&#10;4. Equilíbrio entre requisitos técnicos e comportamentais&#10;&#10;Após a avaliação, refine o texto para melhorar onde houver nota abaixo de 8 e apresente a versão ajustada como resposta final.">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            Copiar
+          </button>
+        </div>
+        <div class="prompt-box-body">Redija uma descrição de vaga para Analista de Dados
+Júnior em uma empresa de tecnologia. O texto deve ser
+atrativo para jovens profissionais, claro nos requisitos e
+alinhado a uma cultura de inovação.
+
+Antes de entregar a versão final, avalie a qualidade do
+texto com base nos critérios abaixo, atribuindo uma nota
+de 0 a 10 para cada um:
+1. Clareza na descrição da função
+2. Atratividade para o público jovem
+3. Adequação ao perfil de empresa inovadora
+4. Equilíbrio entre requisitos técnicos e comportamentais
+
+Após a avaliação, refine o texto para melhorar onde houver
+nota abaixo de 8 e apresente a versão ajustada como
+resposta final.</div>
+      </div>
+    </article>
+
+    <article class="pattern reveal" id="p11">
+      <div class="pattern-head">
+        <div class="pattern-num">11</div>
+        <div class="pattern-titlewrap">
+          <div class="pattern-title">Crítico-<span class="accent">Revisor</span></div>
+          <div class="pattern-sub">Padrão 11 / 15</div>
+        </div>
+      </div>
+      <p class="pattern-desc">Pede à IA que assuma o papel de revisor exigente, aplicando critérios claros (clareza, precisão, tom, aderência ao objetivo, riscos). Primeiro atribui notas e lista melhorias, depois entrega a versão revisada. <strong>Transforma revisão subjetiva em processo objetivo e replicável.</strong></p>
+      <div class="prompt-box">
+        <div class="prompt-box-head">
+          <span class="prompt-box-label">Etapa 1 · Gerar</span>
+          <button class="copy-btn" data-copy="Você é redator sênior de propostas comerciais. Redija uma proposta de R$ 250.000 para o cliente [X], destacando ROI esperado em 6 meses. Tom: profissional, direto. Máximo 15 linhas.">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            Copiar
+          </button>
+        </div>
+        <div class="prompt-box-body">Você é redator sênior de propostas comerciais.
+Redija uma proposta de R$ 250.000 para o cliente [X],
+destacando ROI esperado em 6 meses.
+Tom: profissional, direto. Máximo 15 linhas.</div>
+      </div>
+      <div class="prompt-box">
+        <div class="prompt-box-head">
+          <span class="prompt-box-label">Etapa 2 · Virar crítico</span>
+          <button class="copy-btn" data-copy="Agora assuma o papel de Diretor Comercial Sênior, 20 anos de mercado, conhecido por reprovar propostas genéricas.&#10;&#10;Avalie a proposta acima:&#10;1. Atribua notas (0–10) em: clareza, precisão, tom, aderência ao objetivo, riscos.&#10;2. Liste melhorias práticas por critério.&#10;3. Reescreva a proposta incorporando os ajustes e entregue a versão final.">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            Copiar
+          </button>
+        </div>
+        <div class="prompt-box-body">Agora assuma o papel de Diretor Comercial Sênior, 20 anos
+de mercado, conhecido por reprovar propostas genéricas.
+
+Avalie a proposta acima:
+1. Atribua notas (0–10) em: clareza, precisão, tom,
+   aderência ao objetivo, riscos.
+2. Liste melhorias práticas por critério.
+3. Reescreva a proposta incorporando os ajustes e
+   entregue a versão final.</div>
+      </div>
+    </article>
+
+    <article class="pattern reveal" id="p12">
+      <div class="pattern-head">
+        <div class="pattern-num">12</div>
+        <div class="pattern-titlewrap">
+          <div class="pattern-title">Refinamento <span class="accent">Iterativo</span></div>
+          <div class="pattern-sub">Padrão 12 / 15</div>
+        </div>
+      </div>
+      <p class="pattern-desc">A primeira resposta da IA é matéria-prima. Quem refina com precisão, ganha qualidade. Trocar "faz de novo" pela fórmula <strong>M-M-A</strong> muda completamente o resultado.</p>
+      <div class="mma-row">
+        <div class="mma-box"><div class="mma-letter">M</div><div class="mma-name">Mantenha</div><div class="mma-desc">o que funciona</div></div>
+        <div class="mma-box"><div class="mma-letter">M</div><div class="mma-name">Mude</div><div class="mma-desc">o que falha</div></div>
+        <div class="mma-box"><div class="mma-letter">A</div><div class="mma-name">Adicione</div><div class="mma-desc">o que falta</div></div>
+      </div>
+      <div class="prompt-box">
+        <div class="prompt-box-head">
+          <span class="prompt-box-label">Refino cirúrgico</span>
+          <button class="copy-btn" data-copy="Mantenha: a estrutura e o tom direto.&#10;Mude: o segundo parágrafo (está genérico).&#10;Adicione: 1 exemplo concreto de cliente real.">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            Copiar
+          </button>
+        </div>
+        <div class="prompt-box-body">Mantenha: a estrutura e o tom direto.
+Mude: o segundo parágrafo (está genérico).
+Adicione: 1 exemplo concreto de cliente real.</div>
+      </div>
+      <div class="note"><span class="mark">→</span> Ajuste preciso, sem perder o que estava bom.</div>
+    </article>
+
+    <!-- ===================== CATEGORIA: ESCALA ===================== -->
+    <section class="category reveal" id="cat-escala">
+      <div class="cat-head">
+        <span class="cat-tag">Escala</span>
+        <span class="cat-range">Padrões 13 — 15</span>
+      </div>
+      <h2 class="cat-title"><span class="i">Estender</span> a IA.</h2>
+    </section>
+
+    <article class="pattern reveal" id="p13">
+      <div class="pattern-head">
+        <div class="pattern-num">13</div>
+        <div class="pattern-titlewrap">
+          <div class="pattern-title">Prompt <span class="accent">Chaining</span></div>
+          <div class="pattern-sub">Padrão 13 / 15</div>
+        </div>
+      </div>
+      <p class="pattern-desc">Uma tarefa grande é quebrada em vários prompts menores. A saída de um vira a entrada do próximo. Caso real: transformar um relatório financeiro de 30 páginas em um resumo executivo de 1 página.</p>
+      <div class="chain-step">
+        <div class="chain-num">01</div>
+        <div class="prompt-box" style="flex:1;">
+          <div class="prompt-box-head"><span class="prompt-box-label">Extração</span></div>
+          <div class="prompt-box-body">"Leia o relatório anexo. Liste os 5 principais dados financeiros (com valores e período)."</div>
+        </div>
+      </div>
+      <div class="chain-arrow">↓</div>
+      <div class="chain-step">
+        <div class="chain-num">02</div>
+        <div class="prompt-box" style="flex:1;">
+          <div class="prompt-box-head"><span class="prompt-box-label">Análise</span></div>
+          <div class="prompt-box-body">"Para cada dado da lista acima, aponte tendência (alta/queda/estável) e risco associado."</div>
+        </div>
+      </div>
+      <div class="chain-arrow">↓</div>
+      <div class="chain-step">
+        <div class="chain-num">03</div>
+        <div class="prompt-box" style="flex:1;">
+          <div class="prompt-box-head"><span class="prompt-box-label">Síntese · saída final</span></div>
+          <div class="prompt-box-body">"A partir da tabela acima, gere um resumo executivo em 3 parágrafos, em tom direto, para apresentação ao board."</div>
+        </div>
+      </div>
+    </article>
+
+    <article class="pattern reveal" id="p14">
+      <div class="pattern-head">
+        <div class="pattern-num">14</div>
+        <div class="pattern-titlewrap">
+          <div class="pattern-title">ReAct · <span class="accent">Reason+Act</span></div>
+          <div class="pattern-sub">Padrão 14 / 15</div>
+        </div>
+      </div>
+      <p class="pattern-desc">A IA não responde tudo "de cabeça". Ela raciocina (Reason), aciona uma ferramenta externa (Act) como busca, calculadora, API ou banco de dados, e observa o resultado. Repete o ciclo até ter o que precisa. <strong>É o fundamento dos agentes de IA.</strong></p>
+      <div class="prompt-box">
+        <div class="prompt-box-head">
+          <span class="prompt-box-label">Prompt enviado à IA</span>
+          <button class="copy-btn" data-copy="Você é um assistente com acesso às ferramentas:&#10;• buscar_cotacao(moeda) → cotação atual&#10;• calcular(expressao) → executa o cálculo&#10;&#10;Use obrigatoriamente este formato:&#10;PENSAMENTO: o que farei a seguir&#10;AÇÃO: ferramenta(parâmetros)&#10;OBSERVAÇÃO: resultado retornado&#10;... (repita até concluir)&#10;RESPOSTA: resposta final ao usuário&#10;&#10;Pergunta: &quot;Quanto custa, em reais, um produto de US$ 500 aplicando margem de 22% sobre a cotação de hoje?&quot;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            Copiar
+          </button>
+        </div>
+        <div class="prompt-box-body">Você é um assistente com acesso às ferramentas:
+• buscar_cotacao(moeda) → cotação atual
+• calcular(expressao) → executa o cálculo
+
+Use obrigatoriamente este formato:
+PENSAMENTO: o que farei a seguir
+AÇÃO: ferramenta(parâmetros)
+OBSERVAÇÃO: resultado retornado
+... (repita até concluir)
+RESPOSTA: resposta final ao usuário
+
+Pergunta:
+"Quanto custa, em reais, um produto de US$ 500
+aplicando margem de 22% sobre a cotação de hoje?"</div>
+      </div>
+      <div class="prompt-box">
+        <div class="prompt-box-head"><span class="prompt-box-label">Resposta da IA · loop</span></div>
+        <div class="prompt-box-body"><span class="dim">PENSAMENTO:</span> preciso da cotação USD do dia.
+<span class="dim">AÇÃO:</span> buscar_cotacao("USD")
+<span class="dim">OBSERVAÇÃO:</span> USD = R$ 5,12
+<span class="dim">PENSAMENTO:</span> agora calculo 500 × 5,12 × 1,22.
+<span class="dim">AÇÃO:</span> calcular("500 * 5.12 * 1.22")
+<span class="dim">OBSERVAÇÃO:</span> 3.123,20
+<span class="dim">PENSAMENTO:</span> tenho o valor final.
+<span class="lit">RESPOSTA:</span> O produto custa R$ 3.123,20.</div>
+      </div>
+    </article>
+
+    <article class="pattern reveal" id="p15">
+      <div class="pattern-head">
+        <div class="pattern-num">15</div>
+        <div class="pattern-titlewrap">
+          <div class="pattern-title">Meta-<span class="accent">Prompting</span></div>
+          <div class="pattern-sub">Padrão 15 / 15</div>
+        </div>
+      </div>
+      <p class="pattern-desc">A IA escreve o prompt para você. Você descreve a tarefa, ela monta a instrução ideal: estruturada, com role, contexto, técnicas e formato definidos. <strong>Base de bibliotecas de prompt reutilizáveis.</strong></p>
+      <div class="prompt-box">
+        <div class="prompt-box-head">
+          <span class="prompt-box-label">Meta-prompt · entrada</span>
+          <button class="copy-btn" data-copy="Crie o melhor prompt possível para gerar análises SWOT de empresas brasileiras do varejo alimentar.&#10;&#10;O prompt deve:&#10;• Definir um role específico&#10;• Pedir contexto da empresa entre aspas triplas&#10;• Aplicar Chain-of-Thought&#10;• Incluir critérios de qualidade (clareza, objetividade, ausência de jargão)&#10;• Ser estruturado com ###">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            Copiar
+          </button>
+        </div>
+        <div class="prompt-box-body">Crie o melhor prompt possível para gerar análises SWOT
+de empresas brasileiras do varejo alimentar.
+
+O prompt deve:
+• Definir um role específico
+• Pedir contexto da empresa entre aspas triplas
+• Aplicar Chain-of-Thought
+• Incluir critérios de qualidade (clareza, objetividade,
+  ausência de jargão)
+• Ser estruturado com ###</div>
+      </div>
+      <div class="prompt-box">
+        <div class="prompt-box-head"><span class="prompt-box-label">Prompt entregue pela IA</span></div>
+        <div class="prompt-box-body"><span class="lit">### Papel</span>
+Você é consultor sênior de varejo alimentar brasileiro,
+com 15 anos de experiência em SWOT.
+
+<span class="lit">### Contexto da empresa</span>
+"""
+[colar aqui descrição da empresa]
+"""
+
+<span class="lit">### Tarefa</span>
+Pense passo a passo e gere uma análise SWOT...
+<span class="dim">[prompt completo, pronto para reutilizar]</span></div>
+      </div>
+    </article>
+
+    <!-- ===================== CLOSING ===================== -->
+    <section class="closing reveal">
+      <div class="closing-eyebrow"><span class="rule"></span> síntese · encerramento</div>
+      <h2 class="manifesto"><span class="i">Prompt não é</span> <span class="b">pedido.</span><br><span class="i">É</span> <span class="b">projeto.</span></h2>
+      <p class="manifesto-body">Cada um dos 15 padrões resolve um problema específico: <strong>estruturar a entrada, guiar o raciocínio, controlar a qualidade</strong> ou <strong>escalar a saída</strong>. Use o certo para cada caso e combine quando o problema for grande. A IA passa a entregar <span class="hl">o seu padrão, não o dela.</span></p>
+      <div class="summary-grid">
+        <div class="summary-card"><span class="tag">Entrada</span><div class="name">Estruturar o pedido</div><div class="range">01 — 06</div></div>
+        <div class="summary-card"><span class="tag">Raciocínio</span><div class="name">Guiar o pensar</div><div class="range">07 — 09</div></div>
+        <div class="summary-card"><span class="tag">Qualidade</span><div class="name">Controlar o output</div><div class="range">10 — 12</div></div>
+        <div class="summary-card"><span class="tag">Escala</span><div class="name">Estender a IA</div><div class="range">13 — 15</div></div>
+      </div>
+
+      <div class="cta">
+        <div class="cta-title">Quer aprender como usar IA de forma estratégica?</div>
+        <a class="cta-btn" href="https://api.whatsapp.com/send/?phone=5531972652814&text=Ol%C3%A1%21+Quero+saber+mais+sobre+os+programas+da+Matter+Academy.&type=phone_number&app_absent=0" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.32A7.85 7.85 0 0012.05 4a7.94 7.94 0 00-6.9 11.9L4 20l4.2-1.1a7.9 7.9 0 003.8 1h.05a7.94 7.94 0 007.9-7.9 7.85 7.85 0 00-2.35-5.68zm-5.55 12.2h-.03a6.6 6.6 0 01-3.36-.92l-.24-.14-2.5.65.67-2.44-.16-.25a6.58 6.58 0 01-1-3.5 6.6 6.6 0 016.6-6.6 6.55 6.55 0 014.66 1.94 6.55 6.55 0 011.93 4.67 6.6 6.6 0 01-6.57 6.6zm3.6-4.94c-.2-.1-1.17-.58-1.35-.64-.18-.06-.31-.1-.45.1-.13.2-.5.64-.62.77-.11.13-.23.14-.42.05a5.4 5.4 0 01-1.6-.98 6 6 0 01-1.1-1.38c-.12-.2 0-.3.09-.4.09-.1.2-.24.3-.36.1-.12.13-.2.2-.34.06-.13.03-.25-.02-.35-.05-.1-.45-1.08-.61-1.48-.16-.38-.33-.33-.45-.34h-.38a.74.74 0 00-.53.25c-.18.2-.7.68-.7 1.65 0 .97.71 1.9.81 2.04.1.13 1.4 2.14 3.4 3 .47.2.85.33 1.14.42.48.15.92.13 1.26.08.38-.06 1.17-.48 1.34-.94.16-.46.16-.86.11-.94-.05-.09-.18-.14-.38-.24z"/></svg>
+          Chamar no WhatsApp
+        </a>
+      </div>
+    </section>
+
+    <footer>
+      <div class="fbrand">MATTER ACADEMY</div>
+      <div class="fmeta">15 padrões de prompt para usar com IA</div>
+    </footer>
+
+  </div>
+
+<script>
+  // copy to clipboard
+  document.querySelectorAll('.copy-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const text = btn.getAttribute('data-copy');
+      navigator.clipboard.writeText(text).then(()=>{
+        const original = btn.innerHTML;
+        btn.classList.add('copied');
+        btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Copiado';
+        setTimeout(()=>{
+          btn.classList.remove('copied');
+          btn.innerHTML = original;
+        }, 1800);
+      });
+    });
+  });
+
+  // scroll reveal
+  const observer = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.classList.add('in');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, {threshold:0.08});
+  document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+</script>
+
+</body>
+</html>
